@@ -1,0 +1,75 @@
+@page "/"
+@inject SudokuApi Api
+
+<PageTitle>Sudoku</PageTitle>
+
+<h1>Sudoku</h1>
+
+<div class="toolbar">
+    <button type="button" @onclick="NewGame" disabled="@_busy">New game</button>
+    @if (_grid is not null)
+    {
+        <span class="state @_grid.State.CssClass()" role="status">@_grid.State.Label()</span>
+    }
+</div>
+
+@if (_error is not null)
+{
+    <p class="error" role="alert">@_error</p>
+}
+
+@if (_grid is not null)
+{
+    <div class="play">
+        @* Keyed by game and replay, so a new game or a replay starts with a fresh board and nothing selected. *@
+        <Board @key="(_grid.Id, _replays)" Grid="_grid" Busy="_busy" OnPick="Place" />
+        <MoveHistory Grid="_grid" Busy="_busy" OnReplay="Replay" />
+    </div>
+}
+
+@code {
+    private Grid? _grid;
+    private string? _error;
+    private bool _busy;
+    private int _replays;
+
+    private Task NewGame() => Call("Could not start a new game", async () => _grid = await Api.NewGameAsync());
+
+    private Task Place(Board.Pick pick) => Call("Could not make the move", async () =>
+    {
+        switch (await Api.MoveAsync(_grid!.Id, pick.Row, pick.Column, pick.Digit))
+        {
+            case MoveResult.Accepted accepted:
+                _grid = accepted.Grid;
+                break;
+            case MoveResult.Rejected rejected:
+                _error = rejected.Reason;
+                break;
+        }
+    });
+
+    private Task Replay(int position) => Call("Could not replay the game", async () =>
+    {
+        _grid = await Api.SetPositionAsync(_grid!.Id, position);
+        _replays++;
+    });
+
+    private async Task Call(string failure, Func<Task> call)
+    {
+        _busy = true;
+        _error = null;
+        try
+        {
+            await call();
+        }
+        // A JsonException means the API sent something this page doesn't understand, such as an unknown state.
+        catch (Exception exception) when (exception is HttpRequestException or System.Text.Json.JsonException)
+        {
+            _error = $"{failure}: {exception.Message}";
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+}

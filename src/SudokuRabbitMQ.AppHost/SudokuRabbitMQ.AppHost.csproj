@@ -1,0 +1,18 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.6.0">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+    <UserSecretsId>82fc24af-6148-45c6-8893-994171d7b165</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SudokuRabbitMQ.Api\SudokuRabbitMQ.Api.csproj" />
+    <ProjectReference Include="..\SudokuRabbitMQ.Web\SudokuRabbitMQ.Web.csproj" />
+  </ItemGroup>
+
+</Project>

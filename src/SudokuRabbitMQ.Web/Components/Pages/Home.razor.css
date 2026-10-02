@@ -1,0 +1,28 @@
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.error {
+    color: #b32121;
+}
+
+.state {
+    font-weight: 600;
+}
+
+.state.solved {
+    color: #2e8b57;
+}
+
+.state.contradicted {
+    color: #b32121;
+}
+
+.play {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}

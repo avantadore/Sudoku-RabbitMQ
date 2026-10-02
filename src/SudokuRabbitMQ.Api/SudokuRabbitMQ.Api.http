@@ -1,0 +1,59 @@
+@SudokuRabbitMQ.Api_HostAddress = http://localhost:5224
+
+GET {{SudokuRabbitMQ.Api_HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+# @name createGame
+POST {{SudokuRabbitMQ.Api_HostAddress}}/games
+Accept: application/json
+
+###
+
+@gameId = {{createGame.response.body.$.id}}
+
+GET {{SudokuRabbitMQ.Api_HostAddress}}/games/{{gameId}}
+Accept: application/json
+
+###
+
+GET {{SudokuRabbitMQ.Api_HostAddress}}/games/{{gameId}}/cells/5/5/candidates
+Accept: application/json
+
+###
+
+PUT {{SudokuRabbitMQ.Api_HostAddress}}/games/{{gameId}}/cells/5/5
+Content-Type: application/json
+Accept: application/json
+
+{ "digit": 7 }
+
+###
+
+# Rejected with 409: 7 is no longer a candidate for a peer of (5, 5).
+PUT {{SudokuRabbitMQ.Api_HostAddress}}/games/{{gameId}}/cells/5/9
+Content-Type: application/json
+Accept: application/json
+
+{ "digit": 7 }
+
+###
+
+# Replays the game to just after its first move. Later moves are kept, so they can be replayed forward again.
+PUT {{SudokuRabbitMQ.Api_HostAddress}}/games/{{gameId}}/position
+Content-Type: application/json
+Accept: application/json
+
+{ "position": 1 }
+
+###
+
+# Rejected with 400: the game has fewer moves than that.
+PUT {{SudokuRabbitMQ.Api_HostAddress}}/games/{{gameId}}/position
+Content-Type: application/json
+Accept: application/json
+
+{ "position": 99 }
+
+###

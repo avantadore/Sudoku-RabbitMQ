@@ -1,0 +1,36 @@
+<section class="history" aria-label="Move history">
+    <div class="history-header">
+        <h2>Moves</h2>
+        <button type="button" aria-label="Replay to the previous move" disabled="@(!HistoryDisplay.CanReplayBack(Grid.Position, Busy))"
+                @onclick="() => OnReplay.InvokeAsync(Grid.Position - 1)">◀</button>
+        <button type="button" aria-label="Replay to the next move" disabled="@(!HistoryDisplay.CanReplayForward(Grid.Position, Grid.Moves.Count, Busy))"
+                @onclick="() => OnReplay.InvokeAsync(Grid.Position + 1)">▶</button>
+    </div>
+    <ol>
+        @foreach (var row in HistoryDisplay.Rows(Grid.Position, Grid.Moves))
+        {
+            <li class="@row.State.CssClass()" aria-current="@(row.State == HistoryRowState.Current ? "step" : null)">
+                <button type="button" disabled="@Busy" @onclick="() => OnReplay.InvokeAsync(row.Position)">
+                    @row.Text
+                    @if (row.Deductions is not null)
+                    {
+                        <span class="deductions" title="@row.DeductionsTooltip">@row.Deductions</span>
+                    }
+                </button>
+            </li>
+        }
+    </ol>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public required Grid Grid { get; set; }
+
+    /// <summary>While true, nothing can be replayed, so replays never overlap.</summary>
+    [Parameter]
+    public bool Busy { get; set; }
+
+    /// <summary>Raised with the position the player wants to replay to.</summary>
+    [Parameter]
+    public EventCallback<int> OnReplay { get; set; }
+}

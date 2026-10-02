@@ -1,0 +1,74 @@
+<div class="board" role="grid" aria-label="Sudoku grid">
+    @foreach (var cell in Grid.Cells)
+    {
+        <div class="@CellClass(cell)" role="gridcell" aria-label="Row @cell.Row, column @cell.Column"
+             @onclick="() => Select(cell)">
+            @if (cell.Digit is { } digit)
+            {
+                <span class="digit @cell.Source?.CssClass()" title="@cell.Source?.Label()">@digit</span>
+            }
+            else if (IsSelected(cell))
+            {
+                <div class="candidates picker">
+                    @for (var candidate = 1; candidate <= 9; candidate++)
+                    {
+                        var digitToPlace = candidate;
+                        @if (cell.Candidates.Contains(candidate))
+                        {
+                            <button type="button" aria-label="Place @candidate" disabled="@Busy"
+                                    @onclick="() => Place(cell, digitToPlace)" @onclick:stopPropagation>@candidate</button>
+                        }
+                        else
+                        {
+                            <span></span>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="candidates">
+                    @for (var candidate = 1; candidate <= 9; candidate++)
+                    {
+                        <span>@(cell.Candidates.Contains(candidate) ? candidate : null)</span>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required Grid Grid { get; set; }
+
+    /// <summary>While true, no digit can be picked, so a move never races another request.</summary>
+    [Parameter]
+    public bool Busy { get; set; }
+
+    /// <summary>Raised when the player picks one of an empty cell's candidates.</summary>
+    [Parameter]
+    public EventCallback<Pick> OnPick { get; set; }
+
+    public sealed record Pick(int Row, int Column, int Digit);
+
+    private (int Row, int Column)? _selected;
+
+    private bool IsSelected(GridCell cell) => _selected == (cell.Row, cell.Column);
+
+    private void Select(GridCell cell) => _selected = cell.Digit is null ? (cell.Row, cell.Column) : null;
+
+    private async Task Place(GridCell cell, int digit)
+    {
+        _selected = null;
+        await OnPick.InvokeAsync(new Pick(cell.Row, cell.Column, digit));
+    }
+
+    // Thick lines are drawn on the right and bottom of every third column and row, around the boxes.
+    private string CellClass(GridCell cell) =>
+        "cell"
+        + (cell.Digit is null ? " empty" : "")
+        + (IsSelected(cell) ? " selected" : "")
+        + (cell.Column % 3 == 0 && cell.Column < 9 ? " box-right" : "")
+        + (cell.Row % 3 == 0 && cell.Row < 9 ? " box-bottom" : "");
+}
