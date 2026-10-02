@@ -1,0 +1,63 @@
+.history {
+    min-width: 12rem;
+}
+
+.history-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.history h2 {
+    font-size: 1.1rem;
+    margin: 0 auto 0 0;
+}
+
+.history ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: calc(9 * 3.5rem);
+    overflow-y: auto;
+    font-variant-numeric: tabular-nums;
+}
+
+.history li button {
+    width: 100%;
+    text-align: left;
+    padding: 0.15rem 0.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.history li button:hover:not(:disabled) {
+    background: #eef2fa;
+}
+
+.history li button:disabled {
+    cursor: default;
+}
+
+.history li.current button {
+    background: #dbe7ff;
+    font-weight: 600;
+}
+
+.history li.after {
+    color: #999;
+}
+
+.deductions {
+    margin-left: 0.3em;
+    color: #2e8b57;
+    cursor: help;
+}
+
+.history li.after .deductions {
+    color: inherit;
+}

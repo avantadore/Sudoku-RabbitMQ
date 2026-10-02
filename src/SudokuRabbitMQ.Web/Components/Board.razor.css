@@ -1,0 +1,84 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(9, 3.5rem);
+    grid-template-rows: repeat(9, 3.5rem);
+    border: 3px solid #222;
+    width: max-content;
+}
+
+.cell {
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell:nth-child(9n) {
+    border-right: none;
+}
+
+.cell:nth-last-child(-n + 9) {
+    border-bottom: none;
+}
+
+.cell.box-right {
+    border-right: 3px solid #222;
+}
+
+.cell.box-bottom {
+    border-bottom: 3px solid #222;
+}
+
+.digit {
+    font-size: 2rem;
+}
+
+.candidates {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+    font-size: 0.7rem;
+    color: #666;
+    text-align: center;
+    line-height: 1.1rem;
+}
+
+.cell.empty {
+    cursor: pointer;
+}
+
+.cell.empty:hover {
+    background: #f2f6fc;
+}
+
+.cell.selected {
+    background: #dde8f8;
+}
+
+.picker button {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a4f9c;
+    cursor: pointer;
+}
+
+.picker button:hover {
+    background: #1a4f9c;
+    color: white;
+}
+
+/* The player's moves in ink, the game's deductions in a distinct colour. */
+.digit.move {
+    color: #222;
+}
+
+.digit.deduction {
+    color: #2e8b57;
+    font-style: italic;
+}

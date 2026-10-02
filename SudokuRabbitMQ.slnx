@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SudokuRabbitMQ.Api/SudokuRabbitMQ.Api.csproj" />
+    <Project Path="src/SudokuRabbitMQ.AppHost/SudokuRabbitMQ.AppHost.csproj" />
+    <Project Path="src/SudokuRabbitMQ.Core/SudokuRabbitMQ.Core.csproj" />
+    <Project Path="src/SudokuRabbitMQ.ServiceDefaults/SudokuRabbitMQ.ServiceDefaults.csproj" />
+    <Project Path="src/SudokuRabbitMQ.Web/SudokuRabbitMQ.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SudokuRabbitMQ.Api.Tests/SudokuRabbitMQ.Api.Tests.csproj" />
+    <Project Path="tests/SudokuRabbitMQ.Core.Tests/SudokuRabbitMQ.Core.Tests.csproj" />
+    <Project Path="tests/SudokuRabbitMQ.Web.Tests/SudokuRabbitMQ.Web.Tests.csproj" />
+  </Folder>
+</Solution>

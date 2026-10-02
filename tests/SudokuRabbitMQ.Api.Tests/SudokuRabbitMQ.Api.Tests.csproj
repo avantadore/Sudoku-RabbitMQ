@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Testcontainers.RabbitMq" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SudokuRabbitMQ.Api\SudokuRabbitMQ.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The same example puzzle and broker the Core tests use, shared rather than copied. -->
+    <Compile Include="..\SudokuRabbitMQ.Core.Tests\Puzzle.cs" Link="Puzzle.cs" />
+    <Compile Include="..\SudokuRabbitMQ.Core.Tests\Broker.cs" Link="Broker.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
